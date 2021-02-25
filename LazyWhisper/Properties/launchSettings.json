@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LazyWhisper": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

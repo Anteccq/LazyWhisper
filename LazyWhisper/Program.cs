@@ -13,7 +13,7 @@ namespace LazyWhisper
             await Host.CreateDefaultBuilder().ConfigureServices((hostContext, services) =>
             {
                 services.AddOptions();
-                services.Configure<Config>(hostContext.Configuration);
+                services.Configure<Config>(hostContext.Configuration.GetSection("Config"));
             }).RunConsoleAppFrameworkAsync<LazyWhisper>(args);
         }
     }

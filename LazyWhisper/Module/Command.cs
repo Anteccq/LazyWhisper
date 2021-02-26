@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.Net;
 
@@ -39,6 +40,63 @@ namespace LazyWhisper.Module
             var message = args.Skip(1).Aggregate((a, b) => $"{a} {b}");
             await _dataRepository.InsertAsync(args[0], message, Context.Channel.Id);
             await ReplyAsync($"The {args[0]} command has been registered");
+        }
+
+        [Command("edit")]
+        public async Task EditCommandAsync(params string[] args)
+        {
+            if (args.Length < 2)
+            {
+                await ReplyAsync("!edit CommandName Message");
+                return;
+            }
+
+            var result = await _dataRepository.FindAsync(args[0], Context.Channel.Id);
+            if (result == null)
+            {
+                await ReplyAsync("The command is not registered.");
+                return;
+            }
+
+            var message = args.Skip(1).Aggregate((a, b) => $"{a} {b}");
+            await _dataRepository.UpdateAsync(args[0], message, Context.Channel.Id);
+            await ReplyAsync($"The {args[0]} command has been changed");
+        }
+
+        [Command("remove")]
+        public async Task RemoveCommandAsync(params string[] args)
+        {
+            if (args.Length != 1)
+            {
+                await ReplyAsync("!remove CommandName");
+                return;
+            }
+
+            var result = await _dataRepository.FindAsync(args[0], Context.Channel.Id);
+            if (result == null)
+            {
+                await ReplyAsync("The command is not registered.");
+                return;
+            }
+
+            await _dataRepository.DeleteAsync(args[0], Context.Channel.Id);
+            await ReplyAsync($"The {args[0]} command has been deleted");
+        }
+
+        [Command("list")]
+        public async Task ListCommandAsync()
+        {
+            var commands = await _dataRepository.FindAllAsync(Context.Channel.Id);
+            var isExists = commands != null && commands.Length != 0;
+            var eb = new EmbedBuilder()
+            {
+                Color = Color.DarkBlue,
+                Title = "Command List",
+                Description = isExists
+                    ? commands.Select(x => x.CommandName).Aggregate((a, b) => $"{a}\n{b}")
+                    : "No command available"
+            };
+            await ReplyAsync(embed: eb.Build());
         }
     }
 }

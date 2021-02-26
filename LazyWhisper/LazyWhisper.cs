@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using ConsoleAppFramework;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using LazyWhisper.Module;
 using Microsoft.Extensions.Options;
 
 namespace LazyWhisper
@@ -16,8 +18,13 @@ namespace LazyWhisper
         private IOptions<Config> _config;
         private DiscordSocketClient _client;
         private CommandService _command;
+        private CustomCommandModule _customModule;
 
-        public LazyWhisper(IOptions<Config> config) => _config = config;
+        public LazyWhisper(IOptions<Config> config, CustomCommandModule customModule)
+        {
+            _config = config;
+            _customModule = customModule;
+        }
 
         public async Task ExecuteAsync()
         {
@@ -48,6 +55,11 @@ namespace LazyWhisper
             var context = new CommandContext(_client, msg);
             var isSuccess = (await _command.ExecuteAsync(context, argPos, null)).IsSuccess;
             if(isSuccess) return;
+
+            var words = msg.Content.Split(' ');
+            if(words.Length != 1 || words[0].Length == 1) return;
+            var command = words[0].Remove(0,1);
+            await _customModule.ExecuteAsync(command, context.Guild.Id, s => msg.Channel.SendMessageAsync(s));
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.Extensions.Options;
+using MySql.Data.MySqlClient;
 
 namespace LazyWhisper.Module
 {
@@ -15,9 +18,16 @@ namespace LazyWhisper.Module
             _connectionString = config.Value.ConnectionStrings;
         }
 
-        public Task<CustomCommand> FindAsync(string commandName, ulong channelId)
+        public async Task<CustomCommand> FindAsync(string commandName, ulong channelId)
         {
-            throw new NotImplementedException();
+            var sql =
+                "select command_name reply from commands " +
+                "where guild_id = @guildId ";
+
+            await using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var commands =  await connection.QueryAsync<CustomCommand>(sql, new { guildId = channelId});
+            return commands?.First();
         }
 
         public Task<CustomCommand[]> FindAllAsync(ulong channelId)

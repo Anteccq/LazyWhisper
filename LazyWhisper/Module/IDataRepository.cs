@@ -11,5 +11,6 @@ namespace LazyWhisper.Module
         Task<CustomCommand[]> FindAllAsync(ulong channelId);
         Task DeleteAsync(string commandName, ulong channelId);
         Task UpdateAsync(string commandName, string reply, ulong channelId);
+        Task InsertAsync(string commandName, string reply, ulong channelId);
     }
 }

@@ -61,5 +61,25 @@ namespace LazyWhisper.Module
             await _dataRepository.UpdateAsync(args[0], message, Context.Channel.Id);
             await ReplyAsync($"The {args[0]} command has been changed");
         }
+
+        [Command("remove")]
+        public async Task RemoveCommandAsync(params string[] args)
+        {
+            if (args.Length != 1)
+            {
+                await ReplyAsync("!remove CommandName");
+                return;
+            }
+
+            var result = await _dataRepository.FindAsync(args[0], Context.Channel.Id);
+            if (result == null)
+            {
+                await ReplyAsync("The command is not registered.");
+                return;
+            }
+
+            await _dataRepository.DeleteAsync(args[0], Context.Channel.Id);
+            await ReplyAsync($"The {args[0]} command has been deleted");
+        }
     }
 }

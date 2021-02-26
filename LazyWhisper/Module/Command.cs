@@ -10,6 +10,12 @@ namespace LazyWhisper.Module
 {
     public class Command : ModuleBase
     {
+        private IDataRepository _dataRepository;
+
+        public Command(IDataRepository dataRepository)
+        {
+            _dataRepository = dataRepository;
+        }
 
         [Command("add")]
         public async Task AddCommandAsync(params string[] args)

@@ -40,5 +40,26 @@ namespace LazyWhisper.Module
             await _dataRepository.InsertAsync(args[0], message, Context.Channel.Id);
             await ReplyAsync($"The {args[0]} command has been registered");
         }
+
+        [Command("edit")]
+        public async Task EditCommandAsync(params string[] args)
+        {
+            if (args.Length < 2)
+            {
+                await ReplyAsync("!edit CommandName Message");
+                return;
+            }
+
+            var result = await _dataRepository.FindAsync(args[0], Context.Channel.Id);
+            if (result == null)
+            {
+                await ReplyAsync("The command is not registered.");
+                return;
+            }
+
+            var message = args.Skip(1).Aggregate((a, b) => $"{a} {b}");
+            await _dataRepository.UpdateAsync(args[0], message, Context.Channel.Id);
+            await ReplyAsync($"The {args[0]} command has been changed");
+        }
     }
 }

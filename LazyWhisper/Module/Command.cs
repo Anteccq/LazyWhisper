@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.Net;
 
@@ -80,6 +81,22 @@ namespace LazyWhisper.Module
 
             await _dataRepository.DeleteAsync(args[0], Context.Channel.Id);
             await ReplyAsync($"The {args[0]} command has been deleted");
+        }
+
+        [Command("list")]
+        public async Task ListCommandAsync()
+        {
+            var commands = await _dataRepository.FindAllAsync(Context.Channel.Id);
+            var isExists = commands != null && commands.Length != 0;
+            var eb = new EmbedBuilder()
+            {
+                Color = Color.DarkBlue,
+                Title = "Command List",
+                Description = isExists
+                    ? commands.Select(x => x.CommandName).Aggregate((a, b) => $"{a}\n{b}")
+                    : "No command available"
+            };
+            await ReplyAsync(embed: eb.Build());
         }
     }
 }

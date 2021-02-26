@@ -37,6 +37,14 @@ namespace LazyWhisper.Module
                 await ReplyAsync("Default commands cannot be registered");
                 return;
             }
+
+            var result = await _dataRepository.FindAsync(args[0], Context.Channel.Id);
+            if (result != null)
+            {
+                await ReplyAsync("The command has already been registered");
+                return;
+            }
+
             var message = args.Skip(1).Aggregate((a, b) => $"{a} {b}");
             await _dataRepository.InsertAsync(args[0], message, Context.Channel.Id);
             await ReplyAsync($"The {args[0]} command has been registered");

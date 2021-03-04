@@ -13,8 +13,10 @@ namespace LazyWhisper
         {
             await Host.CreateDefaultBuilder().ConfigureServices((hostContext, services) =>
             {
+                var repositoryService = services.AddSingleton<IDataRepository, SqlDataRepository>();
                 services.AddOptions();
                 services.AddSingleton<CustomCommandModule>();
+                services.AddSingleton<IServiceProvider>(repositoryService.BuildServiceProvider());
                 services.Configure<Config>(hostContext.Configuration.GetSection("Config"));
             }).RunConsoleAppFrameworkAsync<LazyWhisper>(args);
         }

@@ -19,11 +19,13 @@ namespace LazyWhisper
         private DiscordSocketClient _client;
         private CommandService _command;
         private CustomCommandModule _customModule;
+        private IServiceProvider _service;
 
-        public LazyWhisper(IOptions<Config> config, CustomCommandModule customModule)
+        public LazyWhisper(IOptions<Config> config, CustomCommandModule customModule, IServiceProvider service)
         {
             _config = config;
             _customModule = customModule;
+            _service = service;
         }
 
         public async Task ExecuteAsync()
@@ -37,7 +39,7 @@ namespace LazyWhisper
             };
 
             _client.MessageReceived += MessageHandle;
-            await _command.AddModulesAsync(Assembly.GetEntryAssembly(), null);
+            await _command.AddModulesAsync(Assembly.GetEntryAssembly(), _service);
             await _client.LoginAsync(TokenType.Bot, _config.Value.Token);
             await _client.StartAsync();
 
@@ -53,7 +55,7 @@ namespace LazyWhisper
             var argPos = 0;
             if (!(msg.HasCharPrefix('!', ref argPos)) || msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) return;
             var context = new CommandContext(_client, msg);
-            var isSuccess = (await _command.ExecuteAsync(context, argPos, null)).IsSuccess;
+            var isSuccess = (await _command.ExecuteAsync(context, argPos, _service)).IsSuccess;
             if(isSuccess) return;
 
             var words = msg.Content.Split(' ');

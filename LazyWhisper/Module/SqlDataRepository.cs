@@ -22,12 +22,12 @@ namespace LazyWhisper.Module
         {
             var sql =
                 "select command, reply from commands " +
-                "where guild_id = @guildId ";
+                "where guild_id = @guildId " +
+                "and command = @command";
 
             await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
-            var command =  await connection.QueryFirstAsync<CustomCommand>(sql, new { guildId = channelId});
-            return command;
+            return await connection.QueryFirstOrDefaultAsync<CustomCommand>(sql, new { guildId = channelId, command = commandName });
         }
 
         public Task<CustomCommand[]> FindAllAsync(ulong channelId)

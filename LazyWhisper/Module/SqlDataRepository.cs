@@ -21,7 +21,7 @@ namespace LazyWhisper.Module
         public async Task<CustomCommand> FindAsync(string commandName, ulong channelId)
         {
             var sql =
-                "select command_name reply from commands " +
+                "select command, reply from commands " +
                 "where guild_id = @guildId ";
 
             await using var connection = new MySqlConnection(_connectionString);

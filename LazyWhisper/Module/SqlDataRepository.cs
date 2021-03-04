@@ -26,8 +26,8 @@ namespace LazyWhisper.Module
 
             await using var connection = new MySqlConnection(_connectionString);
             await connection.OpenAsync();
-            var commands =  await connection.QueryAsync<CustomCommand>(sql, new { guildId = channelId});
-            return commands?.First();
+            var command =  await connection.QueryFirstAsync<CustomCommand>(sql, new { guildId = channelId});
+            return command;
         }
 
         public Task<CustomCommand[]> FindAllAsync(ulong channelId)

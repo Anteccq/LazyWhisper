@@ -30,9 +30,16 @@ namespace LazyWhisper.Module
             return await connection.QueryFirstOrDefaultAsync<CustomCommand>(sql, new { guildId = channelId, command = commandName });
         }
 
-        public Task<CustomCommand[]> FindAllAsync(ulong channelId)
+        public async Task<CustomCommand[]> FindAllAsync(ulong channelId)
         {
-            throw new NotImplementedException();
+            var sql =
+                "select command, reply from commands " +
+                "where guild_id = @guildId ";
+
+            await using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var result = await connection.QueryAsync<CustomCommand>(sql, new {guildId = channelId});
+            return result.ToArray();
         }
 
         public Task DeleteAsync(string commandName, ulong channelId)

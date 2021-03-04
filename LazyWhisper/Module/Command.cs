@@ -38,7 +38,7 @@ namespace LazyWhisper.Module
                 return;
             }
 
-            var result = await _dataRepository.FindAsync(args[0], Context.Channel.Id);
+            var result = await _dataRepository.FindAsync(args[0], Context.Guild.Id);
             if (result != null)
             {
                 await ReplyAsync("The command has already been registered");
@@ -46,7 +46,7 @@ namespace LazyWhisper.Module
             }
 
             var message = args.Skip(1).Aggregate((a, b) => $"{a} {b}");
-            await _dataRepository.InsertAsync(args[0], message, Context.Channel.Id);
+            await _dataRepository.InsertAsync(args[0], message, Context.Guild.Id);
             await ReplyAsync($"The {args[0]} command has been registered");
         }
 
@@ -59,7 +59,7 @@ namespace LazyWhisper.Module
                 return;
             }
 
-            var result = await _dataRepository.FindAsync(args[0], Context.Channel.Id);
+            var result = await _dataRepository.FindAsync(args[0], Context.Guild.Id);
             if (result == null)
             {
                 await ReplyAsync("The command is not registered.");
@@ -67,7 +67,7 @@ namespace LazyWhisper.Module
             }
 
             var message = args.Skip(1).Aggregate((a, b) => $"{a} {b}");
-            await _dataRepository.UpdateAsync(args[0], message, Context.Channel.Id);
+            await _dataRepository.UpdateAsync(args[0], message, Context.Guild.Id);
             await ReplyAsync($"The {args[0]} command has been changed");
         }
 
@@ -80,21 +80,21 @@ namespace LazyWhisper.Module
                 return;
             }
 
-            var result = await _dataRepository.FindAsync(args[0], Context.Channel.Id);
+            var result = await _dataRepository.FindAsync(args[0], Context.Guild.Id);
             if (result == null)
             {
                 await ReplyAsync("The command is not registered.");
                 return;
             }
 
-            await _dataRepository.DeleteAsync(args[0], Context.Channel.Id);
+            await _dataRepository.DeleteAsync(args[0], Context.Guild.Id);
             await ReplyAsync($"The {args[0]} command has been deleted");
         }
 
         [Command("list")]
         public async Task ListCommandAsync()
         {
-            var commands = await _dataRepository.FindAllAsync(Context.Channel.Id);
+            var commands = await _dataRepository.FindAllAsync(Context.Guild.Id);
             var isExists = commands != null && commands.Length != 0;
             var eb = new EmbedBuilder()
             {

@@ -52,9 +52,35 @@ namespace LazyWhisper.Module
             throw new NotImplementedException();
         }
 
-        public Task InsertAsync(string commandName, string reply, ulong channelId)
+        public async Task InsertAsync(string commandName, string reply, ulong channelId)
         {
-            throw new NotImplementedException();
+            commandName ??= "";
+            reply ??= "";
+
+            var sql =
+                "insert into commands ( command, reply, guild_id ) " +
+                "values ( @command , @reply , @guildId )";
+
+            await using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                await connection.ExecuteAsync(sql, new {command = commandName, reply, guildId = channelId});
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                try
+                {
+                    await transaction.RollbackAsync();
+                }
+                catch
+                {
+                    // Log を残せるようにしておきたいですね。将来的には
+                }
+            }
         }
     }
 }

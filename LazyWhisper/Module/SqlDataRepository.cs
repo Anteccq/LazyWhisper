@@ -55,8 +55,6 @@ namespace LazyWhisper.Module
 
         public async Task InsertAsync(string commandName, string reply, ulong channelId)
         {
-            if(commandName is null || reply is null) return;
-
             var sql =
                 "insert into commands ( command, reply, guild_id ) " +
                 "values ( @command , @reply , @guildId )";

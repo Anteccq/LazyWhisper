@@ -3,10 +3,21 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>AntiqueR</Authors>
+    <Product />
+    <Company />
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AntiquePendulum/LazyWhisper</RepositoryUrl>
+    <Description>A Simple Custom Command Bot for Discord.</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="appsettings.Development.json" />
+    <None Include="..\..\KusanagiBot\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

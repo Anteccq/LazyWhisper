@@ -43,9 +43,33 @@ namespace LazyWhisper.Module
             return result.ToArray();
         }
 
-        public Task DeleteAsync(string commandName, ulong channelId)
+        public async Task DeleteAsync(string commandName, ulong channelId)
         {
-            throw new NotImplementedException();
+            var sql =
+                "delete from commands " +
+                "where guild_Id = @guildId " +
+                "and command = @command ";
+
+            await using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                await connection.ExecuteAsync(sql, new {guildId = channelId, command = commandName});
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                try
+                {
+                    await transaction.RollbackAsync();
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
         }
 
         public Task UpdateAsync(string commandName, string reply, ulong channelId)

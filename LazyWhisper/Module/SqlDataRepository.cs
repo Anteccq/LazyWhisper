@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,8 +55,7 @@ namespace LazyWhisper.Module
 
         public async Task InsertAsync(string commandName, string reply, ulong channelId)
         {
-            commandName ??= "";
-            reply ??= "";
+            if(commandName is null || reply is null) return;
 
             var sql =
                 "insert into commands ( command, reply, guild_id ) " +

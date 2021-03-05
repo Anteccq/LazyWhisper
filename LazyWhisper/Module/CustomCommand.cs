@@ -6,7 +6,13 @@ namespace LazyWhisper.Module
 {
     public class CustomCommand
     {
-        public string CommandName { get; set; }
+        public string Command { get; set; }
         public string Reply { get; set; }
+
+        public CustomCommand(string command, string reply)
+        {
+            Command = command;
+            Reply = reply;
+        }
     }
 }

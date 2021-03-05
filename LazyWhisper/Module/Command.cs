@@ -106,5 +106,26 @@ namespace LazyWhisper.Module
             };
             await ReplyAsync(embed: eb.Build());
         }
+
+        [Command("help")]
+        public async Task HelpCommandAsync()
+        {
+            var footer = new EmbedFooterBuilder()
+                .WithIconUrl(
+                    "https://raw.githubusercontent.com/AntiquePendulum/AntiquePendulum/master/Images/AntiqueR-simple_small.png")
+                .WithText("Developed by AntiqueR");
+            var eb = new EmbedBuilder()
+            {
+                Color = Color.DarkRed,
+                Title = "Default Command List",
+                Footer = footer
+            };
+            eb.AddField("Adding", "```!add Command Message```");
+            eb.AddField("Editing", "```!edit Command Message```");
+            eb.AddField("Deleting", "```!remove Command```");
+            eb.AddField("Command List", "```!list```");
+            eb.AddField("Source Code", "[LazyWhisper GitHub](https://github.com/AntiquePendulum/LazyWhisper)");
+            await ReplyAsync(embed:eb.Build());
+        }
     }
 }

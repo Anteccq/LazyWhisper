@@ -1,8 +1,46 @@
-# [WIP] Lazy Whisper 
-> Kusanagi Bot v2
+#  Lazy Whisper [1.0.0]
+>Lazy Whisper is a simply custom command bot for Discord.
 
-カスタムコマンドを作るための Discord Bot です。
+It needs a appsettings.{Environment}.json file.
 
-前バージョン(Kusanagi Bot) との違いはサーバーごとにコマンドを管理が可能（になる予定です）
+```
+// appsettings.{Environment}.json
+"Config": {
+    "Token": "Discord token",
+    "ConnectionStrings": "{Database connection strings (mysql, mariadb)}"
+}
+```
 
-コマンドの返信に絵文字を含めることが可能（になる予定です）
+## Commands 
+In default, Lazy Whisper has 5 commands.
+
+!add, !edit, !remove, !list, !help
+
+### Adding
+```
+!add Command Message
+```
+### Editing
+```
+!edit Command Message
+```
+### Deleting
+```
+!remove Command
+```
+### Command List
+```
+!list
+```
+### Information (Default command list)
+```
+!help
+```
+
+## Development
+### Requirments
+* .NET Core 3.1
+* MariaDB 10.5
+
+## License
+Under the MIT.

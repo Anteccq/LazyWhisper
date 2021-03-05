@@ -19,6 +19,7 @@ namespace LazyWhisper.Module
         public async Task ExecuteAsync(string command, ulong guildId, Func<string, Task<RestUserMessage>> replyAsync)
         {
             var result = await _dataRepository.FindAsync(command, guildId);
+            if(result is null) return;
             await replyAsync($"{result.Reply}");
         }
     }

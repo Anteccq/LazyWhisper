@@ -101,7 +101,7 @@ namespace LazyWhisper.Module
                 Color = Color.DarkBlue,
                 Title = "Command List",
                 Description = isExists
-                    ? commands.Select(x => x.CommandName).Aggregate((a, b) => $"{a}\n{b}")
+                    ? commands.Select(x => x.Command).Aggregate((a, b) => $"{a}\n{b}")
                     : "No command available"
             };
             await ReplyAsync(embed: eb.Build());

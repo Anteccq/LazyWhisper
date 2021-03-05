@@ -72,9 +72,32 @@ namespace LazyWhisper.Module
             }
         }
 
-        public Task UpdateAsync(string commandName, string reply, ulong channelId)
+        public async Task UpdateAsync(string commandName, string reply, ulong channelId)
         {
-            throw new NotImplementedException();
+            var sql =
+                "update commands set reply = @reply " +
+                "where command = @command " +
+                "and guild_id = @guildId ";
+
+            await using var connection = new MySqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var transaction = await connection.BeginTransactionAsync();
+            try
+            {
+                await connection.ExecuteAsync(sql, new {reply, command = commandName, guildId = channelId});
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                try
+                {
+                    await transaction.RollbackAsync();
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
         }
 
         public async Task InsertAsync(string commandName, string reply, ulong channelId)

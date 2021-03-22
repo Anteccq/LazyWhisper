@@ -10,6 +10,7 @@
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/AntiquePendulum/LazyWhisper</RepositoryUrl>
     <Description>A Simple Custom Command Bot for Discord.</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-#  Lazy Whisper [1.0.0]
+#  Lazy Whisper [1.0.1]
 >Lazy Whisper is a simply custom command bot for Discord.
 
 It needs a appsettings.{Environment}.json file.

@@ -50,7 +50,7 @@ namespace LazyWhisper
 
         private async Task MessageHandle(SocketMessage message)
         {
-            if (!(message is SocketUserMessage msg) || msg.Author.IsBot) return;
+            if (!(message.Channel is ITextChannel) || !(message is SocketUserMessage msg) || msg.Author.IsBot) return;
 
             var argPos = 0;
             if (!(msg.HasCharPrefix('!', ref argPos)) || msg.HasMentionPrefix(_client.CurrentUser, ref argPos)) return;
